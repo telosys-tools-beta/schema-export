@@ -1,0 +1,51 @@
+${entity.name} {
+#foreach( $attribute in $entity.attributes )
+#set( $type = "" )
+#if( ${attribute.type} == "String" )
+#set( $type = "string" )
+#if( ${attribute.databaseSize} != "" )
+#set( $type = $type + "(" + ${attribute.databaseSize} + ")" )
+#end 
+#end
+#if( ${attribute.type} == "short" || ${attribute.type} == "Short" || ${attribute.type} == "int" || ${attribute.type} == "Integer" || ${attribute.type} == "long" || ${attribute.type} == "Long" || ${attribute.type} == "BigInteger" )
+#set( $type = "integer" )
+#if( ${attribute.databaseSize} != "" )
+#set( $type = $type + "(" + ${attribute.databaseSize} + ")" )
+#end 
+#end
+#if( ${attribute.type} == "float" || ${attribute.type} == "Float" || ${attribute.type} == "double" || ${attribute.type} == "Double" || ${attribute.type} == "BigDecimal" )
+#set( $type = "double" )
+#if( ${attribute.databaseSize} != "" )
+#set( $type = $type + "(" + ${attribute.databaseSize} + ")" )
+#end 
+#end
+#if( ${attribute.type} == "boolean" || ${attribute.type} == "Boolean" )
+#set( $type = "bool" )
+#end
+#if( $type == "" )
+#set( $type = "!!! UNKNOWN TYPE !!!" )
+#end
+#set( $annotations = "" )
+#if( ${attribute.databaseDefaultValue} != "" )
+#set( $annotations = $annotations + " " )
+#end
+#if( ${attribute.isAutoIncremented()} )
+#set( $annotations = "" )
+#end
+#if( ${attribute.isKeyElement()} )
+#set( $annotations = $annotations + "@Id " )
+#end
+#if( ${attribute.isNotNull()} )
+#set( $annotations = $annotations + "@NotNull " )
+#end
+#if( $type == "string" && ${attribute.databaseSize} != "" )
+#set( $annotations = $annotations + "@SizeMax("+${attribute.databaseSize}+") " )
+#end
+  ${attribute.name}: ${type} #if( $annotations != "" ){ ${annotations}} #end;
+#end
+#foreach( $link in $entity.selectedLinks )
+#if($link.isOwningSide())
+  ${link.targetEntity}: ${link.targetEntity} ;
+#end
+#end
+}
