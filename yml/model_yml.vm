@@ -1,0 +1,53 @@
+#foreach( $entity in $selectedEntities )
+$entity.name: 
+  table: $entity.databaseTable
+  schema: $entity.databaseSchema
+  attributes: 
+#foreach( $attribute in $entity.attributes )
+    $attribute.name: 
+      type: $attribute.type
+      databaseType: $attribute.databaseType
+      databaseSize: $attribute.databaseSize
+#if( $attribute.databaseDefaultValue != "" )
+      databaseDefaultValue: $attribute.databaseDefaultValue
+#end
+#if( $attribute.isAutoIncremented() )
+      isAutoIncremented: $attribute.isAutoIncremented()
+#end
+#if( $attribute.isKeyElement() )
+      isKeyElement: $attribute.isKeyElement()
+#end
+#if( $attribute.isNotNull() )
+      isNotNull: $attribute.isNotNull()
+#end
+#end
+#set( $hasLink = false )
+#foreach( $link in $entity.selectedLinks )
+#if($link.isOwningSide())
+#set( $hasLink = true )
+#end
+#end
+#if( $hasLink )
+  links: 
+#foreach( $link in $entity.selectedLinks )
+#if($link.isOwningSide())
+    $link.targetEntity: 
+      owner: $link.isOwningSide()
+#if($link.isOptionalFalse())
+      min: 1
+#else
+      min: 0
+#end
+#if($link.isCardinalityOneToOne() || $link.isCardinalityManyToOne())
+      max: 1
+#else
+      max: "*"
+#end
+      mapping: 
+#foreach( $linkAttribute in $link.attributes )
+        $linkAttribute.originAttribute.name: $linkAttribute.targetAttribute.name
+#end
+#end
+#end
+#end
+#end

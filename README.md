@@ -1,4 +1,6 @@
 schema-export
 =============
 
-Database schema export
+Database schema export to :
+- JSON 
+- YAML
