@@ -44,8 +44,12 @@ ${entity.name} {
   ${attribute.name}: ${type} #if( $annotations != "" ){ ${annotations}} #end;
 #end
 #foreach( $link in $entity.selectedLinks )
-#if($link.isOwningSide())
-  ${link.targetEntity}: ${link.targetEntity} ;
+#if( $link.isOwningSide())
+#set( $type = ${link.targetEntity} )
+#if( $link.isCardinalityOneToMany() || $link.isCardinalityManyToMany() )
+#set( $type = $type + "[]" )
+#end
+  ${fn.uncapitalize(${link.targetEntity.name})}: ${type} ;
 #end
 #end
 }
