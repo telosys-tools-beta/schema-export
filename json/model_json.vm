@@ -8,18 +8,18 @@
       "${attribute.name}":{
         "type":"${attribute.type}",
         "databaseType":"${attribute.databaseType}",
-        "databaseSize":"${attribute.databaseSize}",
+        "databaseSize":${attribute.databaseSize},
 #if( ${attribute.databaseDefaultValue} != "" )
         "databaseDefaultValue":"${attribute.databaseDefaultValue}",
 #end
 #if( ${attribute.isAutoIncremented()} )
-        "isAutoIncremented":"${attribute.isAutoIncremented()}",
+        "isAutoIncremented":${attribute.isAutoIncremented()},
 #end
 #if( ${attribute.isKeyElement()} )
-        "isKeyElement":"${attribute.isKeyElement()}",
+        "isKeyElement":${attribute.isKeyElement()},
 #end
 #if( ${attribute.isNotNull()} )
-        "isNotNull":"${attribute.isNotNull()}"
+        "isNotNull":${attribute.isNotNull()}
 #end
       },
 #end
@@ -37,12 +37,12 @@
       "${link.targetEntity}":{
         "owner":"${link.isOwningSide()}",
 #if($link.isOptionalFalse())
-        "min":"1",
+        "min":1,
 #else
-        "min":"0",
+        "min":0,
 #end
 #if($link.isCardinalityOneToOne() || $link.isCardinalityManyToOne())
-        "max":"1",
+        "max":1,
 #else
         "max":"*",
 #end
